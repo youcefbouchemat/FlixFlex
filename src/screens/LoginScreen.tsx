@@ -1,5 +1,5 @@
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import colors from '../../assets/colors';
 import {Image} from 'react-native';
 import Logo from '../../assets/images/logo.png';
@@ -7,17 +7,71 @@ import CustomTextInput from '../components/CustomTextInput';
 import CustomButton from '../components/CustomButton';
 import {useNavigation} from '@react-navigation/native';
 
+import auth from '@react-native-firebase/auth';
+import {showError} from '../Messages';
+import {useDispatch} from 'react-redux';
+import ActionName from '../redux/reducers/ActionName';
+
 const LoginScreen = () => {
+  const dispatch = useDispatch();
+
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    console.log(user);
+    if (user) {
+      dispatch({type: ActionName.connecte, payload: user});
+    }
+  }
+
   const signIn = useCallback(() => {
-    console.log({email});
+    if (email == '' || password == '') {
+      showError('Please fill out all required fields');
+      return;
+    }
+    const regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
+    if (regEmail.test(email) == false) {
+      showError('Wrong Email format');
+      return;
+    }
+
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(user => {
+        dispatch({type: ActionName.connecte, payload: user});
+        console.log(user);
+      })
+      .catch(error => {
+        if (error.code == 'auth/invalid-email') {
+          showError('Wrong email format');
+        }
+        if (error.code == 'auth/user-disabled') {
+          showError(
+            'The user corresponding to the given email has been disabled',
+          );
+        }
+        if (error.code == 'auth/user-not-found') {
+          showError('There is no user corresponding to the given email');
+        }
+        if (error.code == 'auth/wrong-password') {
+          showError(
+            'The password is invalid for the given email, or the account corresponding to the email does not have a password set',
+          );
+        }
+      });
   }, [email, password]);
 
   const register = useCallback(() => {
-    console.log({password});
+    navigation.navigate('RegisterScreen');
   }, []);
 
   return (

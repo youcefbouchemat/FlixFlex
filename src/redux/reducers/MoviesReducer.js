@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import {  } from "./ActionName";
 
 const INITIAL_STATE = {
