@@ -2,7 +2,8 @@ import ActionName from './ActionName';
 
 const INITIAL_STATE = {
   isLogin: false,
-  userData: null,
+  userName: null,
+  userEmail: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -11,14 +12,22 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isLogin: true,
-        userData: action.payload,
+        userName: action.userName ? action.userName : state.userName,
+        userEmail: action.userEmail,
       };
     case ActionName.disconnect:
       return {
         ...state,
         isLogin: false,
-        userData: null,
+        userName: null,
+        userEmail: null,
       };
+    case ActionName.changeusername:
+      return {
+        ...state,
+        userName: action.payload,
+      };
+
     default:
       return state;
   }

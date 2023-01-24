@@ -28,7 +28,11 @@ const LoginScreen = () => {
   function onAuthStateChanged(user) {
     console.log(user);
     if (user) {
-      dispatch({type: ActionName.connecte, payload: user});
+      dispatch({
+        type: ActionName.connecte,
+        userName: user.displayName,
+        userEmail: user.email,
+      });
     }
   }
 
@@ -46,8 +50,12 @@ const LoginScreen = () => {
 
     auth()
       .signInWithEmailAndPassword(email, password)
-      .then(user => {
-        dispatch({type: ActionName.connecte, payload: user});
+      .then(data => {
+        dispatch({
+          type: ActionName.connecte,
+          userName: data.user.displayName,
+          userEmail: data.user.email,
+        });
         console.log(user);
       })
       .catch(error => {

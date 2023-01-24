@@ -7,8 +7,11 @@ import CustomButton from '../components/CustomButton';
 
 import auth from '@react-native-firebase/auth';
 import {showError} from '../Messages';
+import {useDispatch} from 'react-redux';
+import ActionName from '../redux/reducers/ActionName';
 
 const RegisterScreen = () => {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,6 +49,7 @@ const RegisterScreen = () => {
         user.user.updateProfile({
           displayName: username,
         });
+        dispatch({type: ActionName.changeusername, payload: username});
         console.log('User account created & signed in!');
       })
       .catch(error => {
