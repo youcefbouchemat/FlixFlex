@@ -6,6 +6,7 @@ export default {
   primaryLite: '#637aff99',
   primaryBackground: '#2a364e',
   secondaryBackground: '#fe4d55',
+  alphaBlackBackground: 'rgba(24, 26, 32, 0.59)',
   placeholderText: '#ababab',
   blue: '#2e5ea8',
   black: '#000',
