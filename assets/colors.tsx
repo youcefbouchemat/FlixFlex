@@ -5,6 +5,7 @@ export default {
   primaryDark: '#2759ff',
   primaryLite: '#637aff99',
   primaryBackground: '#2B344C',
+  secondaryBackground: '#fe4d55',
   black: '#000',
   white: 'white',
   accent: '#112233',

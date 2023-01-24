@@ -48,7 +48,7 @@ const TabBarButton = (props: {
           <Icon
             type={item.type}
             name={item.icon}
-            color={focused ? colors.white : colors.primary}
+            color={focused ? colors.white : colors.white}
           />
           <Animatable.View ref={textViewRef}>
             {focused && (

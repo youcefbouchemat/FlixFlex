@@ -11,25 +11,25 @@ const bottomBars = [
   {
     route: 'Home',
     label: 'Home',
-    type: 'material',
-    icon: 'groups',
-    color: colors.primaryGreen,
+    type: 'antdesign',
+    icon: 'home',
+    color: colors.primaryLite,
     component: HomeScreen,
   },
   {
-    route: 'Home',
-    label: 'Home',
+    route: 'Movie',
+    label: 'Movie',
     type: 'material',
-    icon: 'groups',
-    color: colors.primaryGreen,
+    icon: 'local-movies',
+    color: colors.secondaryBackground,
     component: MoviesScreen,
   },
 
   {
     route: 'Profile',
     label: 'Profile',
-    type: 'entypo',
-    icon: 'box',
+    type: 'antdesign',
+    icon: 'user',
     color: colors.primaryPink,
     component: ProfileScreen,
   },
@@ -48,6 +48,7 @@ const BottomNavBar = () => {
           right: 16,
           left: 16,
           borderRadius: 16,
+          backgroundColor: colors.primaryBackground,
         },
       }}>
       {bottomBars.map((item, index) => {
