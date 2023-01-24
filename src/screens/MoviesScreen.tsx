@@ -1,14 +1,22 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import Header from '../components/Header';
+import colors from '../../assets/colors';
 
 const MoviesScreen = () => {
   return (
-    <View>
+    <SafeAreaView style={styles.container}>
+      <Header />
       <Text>MoviesScreen</Text>
-    </View>
+    </SafeAreaView>
   );
 };
 
 export default MoviesScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.primaryBackground,
+  },
+});
