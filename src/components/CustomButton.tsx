@@ -1,6 +1,7 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import colors from '../../assets/colors';
+import fonts from '../../assets/fonts/fonts';
 
 const CustomButton = props => {
   return (
@@ -24,5 +25,6 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colors.white,
+    fontFamily: fonts.semiBoldFont,
   },
 });

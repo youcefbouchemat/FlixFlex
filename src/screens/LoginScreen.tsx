@@ -5,8 +5,10 @@ import {Image} from 'react-native';
 import Logo from '../../assets/images/logo.png';
 import CustomTextInput from '../components/CustomTextInput';
 import CustomButton from '../components/CustomButton';
+import {useNavigation} from '@react-navigation/native';
 
 const LoginScreen = () => {
+  const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
