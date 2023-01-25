@@ -11,13 +11,13 @@ import React, {useCallback, useEffect, useState, useRef} from 'react';
 import colors from '../../assets/colors';
 import {Image} from 'react-native';
 import {imageBaseUrl, youtubeUrl} from '../../config';
-import {SharedElement} from 'react-navigation-shared-element';
 import {ScrollView} from 'react-native';
 import {Icon} from '@rneui/themed';
 import axios from 'axios';
 import axiosInstance from '../../config/axios';
 import YoutubeIframe from 'react-native-youtube-iframe';
 import MovieCard from '../components/MovieCard';
+import fonts from '../../assets/fonts/fonts';
 
 const MovieDetails = ({route}) => {
   const windowWidth = Dimensions.get('window').width;
@@ -131,28 +131,26 @@ const MovieDetails = ({route}) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
-        <SharedElement id={`image_${id}`}>
-          <Image
-            source={{uri: imageBaseUrl + image}}
-            style={styles.image}
-            resizeMode="cover"
-          />
-        </SharedElement>
+        <Image
+          source={{uri: imageBaseUrl + image}}
+          style={styles.image}
+          resizeMode="cover"
+        />
         <View style={styles.infoContainer}>
           <View style={styles.titleContainer}>
-            <Text>{title}</Text>
+            <Text style={styles.titleText}>{title}</Text>
           </View>
           <View style={styles.rateContainer}>
             <View style={styles.rateMainContainer}>
               <Icon
-                name="heart-fill"
-                type="octicon"
+                name="star"
+                type="antdesign"
                 size={25}
-                color={colors.red}
+                color={colors.yellow}
               />
-              <Text>{note}</Text>
+              <Text style={styles.noteText}>{note} / 10</Text>
             </View>
-            <Text>{voteCount}</Text>
+            <Text style={styles.voteCountText}>{voteCount} votes</Text>
           </View>
         </View>
         <View style={styles.releaseDateContainer}>
@@ -181,12 +179,7 @@ const MovieDetails = ({route}) => {
         </View>
         {similarMovies.length > 0 && (
           <View>
-            <Text
-              onPress={() => {
-                setSimilarMoviesPage(similarMoviesPage + 1);
-              }}>
-              Similar Movies
-            </Text>
+            <Text style={styles.similarMoviesText}>Similar Movies</Text>
             <FlatList
               ref={flatListViewRef}
               data={similarMovies}
@@ -194,13 +187,7 @@ const MovieDetails = ({route}) => {
               horizontal
               keyExtractor={item => `${item.id}_${Math.random()}`}
               renderItem={({item, index}) => {
-                return (
-                  <MovieCard
-                    data={item}
-                    textColor={colors.black}
-                    refScroll={scrollViewRef}
-                  />
-                );
+                return <MovieCard data={item} textColor={colors.black} />;
               }}
             />
           </View>
@@ -210,24 +197,16 @@ const MovieDetails = ({route}) => {
   );
 };
 
-MovieDetails.sharedElements = route => {
-  const id = route.params.data.id;
-
-  return [
-    {
-      id: `image_${id}`,
-    },
-  ];
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.primaryBackground,
   },
   image: {
     height: 200,
     width: '100%',
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
   },
   infoContainer: {
     flexDirection: 'row',
@@ -235,6 +214,12 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
+    justifyContent: 'center',
+  },
+  titleText: {
+    fontFamily: fonts.boldFont,
+    color: colors.white,
+    fontSize: 20,
   },
   rateContainer: {
     alignItems: 'center',
@@ -244,14 +229,42 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  noteText: {
+    marginLeft: 10,
+    fontFamily: fonts.semiBoldFont,
+    color: colors.white,
+    fontSize: 16,
+  },
+  voteCountText: {
+    fontFamily: fonts.semiBoldFont,
+    color: colors.white,
+    fontSize: 13,
+  },
   releaseDateContainer: {
     alignItems: 'center',
     padding: 16,
   },
-  releaseDateText: {},
-  overviewContainer: {},
-  overviewTitle: {},
-  overviewText: {},
+  releaseDateText: {
+    fontFamily: fonts.boldFont,
+    color: colors.white,
+    fontSize: 16,
+  },
+  overviewContainer: {
+    padding: 16,
+    backgroundColor: colors.transparentWhite,
+  },
+  overviewTitle: {
+    fontFamily: fonts.boldFont,
+    color: colors.black,
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  overviewText: {
+    fontFamily: fonts.semiBoldFont,
+    textAlign: 'justify',
+    fontSize: 14,
+    color: colors.white,
+  },
   trailerContainer: {
     alignItems: 'center',
     height: 300,
@@ -259,7 +272,16 @@ const styles = StyleSheet.create({
   trailerText: {
     alignSelf: 'flex-start',
     padding: 16,
+    fontFamily: fonts.boldFont,
+    fontSize: 18,
+    color: colors.white,
   },
   noAvailableTrailer: {},
+  similarMoviesText: {
+    padding: 16,
+    fontFamily: fonts.boldFont,
+    fontSize: 18,
+    color: colors.white,
+  },
 });
 export default MovieDetails;
