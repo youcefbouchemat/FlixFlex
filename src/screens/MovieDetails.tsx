@@ -9,8 +9,10 @@ import React from 'react';
 import colors from '../../assets/colors';
 import {Image} from 'react-native';
 import {imageBaseUrl} from '../../config';
+import {SharedElement} from 'react-navigation-shared-element';
 
 const MovieDetails = ({route}) => {
+  const id = route.params.data.id;
   const title = route.params.data.original_title;
   const overview = route.params.data.overview;
   const isAdult = route.params.data.adult;
@@ -20,16 +22,26 @@ const MovieDetails = ({route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Image
-        source={{uri: imageBaseUrl + image}}
-        style={styles.image}
-        resizeMode="cover"
-      />
+      <SharedElement id={`image_${id}`}>
+        <Image
+          source={{uri: imageBaseUrl + image}}
+          style={styles.image}
+          resizeMode="cover"
+        />
+      </SharedElement>
     </SafeAreaView>
   );
 };
 
-export default MovieDetails;
+MovieDetails.sharedElements = route => {
+  const id = route.params.data.id;
+
+  return [
+    {
+      id: `image_${id}`,
+    },
+  ];
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -39,7 +51,6 @@ const styles = StyleSheet.create({
   image: {
     height: 300,
     width: '100%',
-    borderBottomLeftRadius: 150,
-    borderBottomRightRadius: 150,
   },
 });
+export default MovieDetails;

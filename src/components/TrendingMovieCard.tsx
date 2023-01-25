@@ -12,6 +12,7 @@ import {imageBaseUrl} from '../../config';
 import fonts from '../../assets/fonts/fonts';
 import colors from '../../assets/colors';
 import {useNavigation} from '@react-navigation/native';
+import {SharedElement} from 'react-navigation-shared-element';
 
 const TrendingMovieCard = props => {
   const windowWidth = Dimensions.get('window').width;
@@ -21,27 +22,29 @@ const TrendingMovieCard = props => {
     navigation.navigate('MovieDetails', {data: props.data});
   };
   return (
-    <TouchableOpacity
-      onPress={displayMovieDetails}
-      style={{
-        width: windowWidth,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-      <ImageBackground
-        source={{uri: imageBaseUrl + props.data.backdrop_path}}
-        resizeMode="cover"
-        imageStyle={styles.image}
+    <SharedElement id={`image_${props.data.id}`}>
+      <TouchableOpacity
+        onPress={displayMovieDetails}
         style={{
-          width: windowWidth * 0.85,
-          height: windowWidth * 0.85,
-          justifyContent: 'flex-end',
+          width: windowWidth,
+          alignItems: 'center',
+          justifyContent: 'center',
         }}>
-        <View style={styles.movieTextContainer}>
-          <Text style={styles.movieText}>{props.data.original_title}</Text>
-        </View>
-      </ImageBackground>
-    </TouchableOpacity>
+        <ImageBackground
+          source={{uri: imageBaseUrl + props.data.backdrop_path}}
+          resizeMode="cover"
+          imageStyle={styles.image}
+          style={{
+            width: windowWidth * 0.85,
+            height: windowWidth * 0.85,
+            justifyContent: 'flex-end',
+          }}>
+          <View style={styles.movieTextContainer}>
+            <Text style={styles.movieText}>{props.data.original_title}</Text>
+          </View>
+        </ImageBackground>
+      </TouchableOpacity>
+    </SharedElement>
   );
 };
 
