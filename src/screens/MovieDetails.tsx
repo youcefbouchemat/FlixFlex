@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState, useRef} from 'react';
 import colors from '../../assets/colors';
 import {Image} from 'react-native';
 import {imageBaseUrl, youtubeUrl} from '../../config';
@@ -17,6 +17,7 @@ import {Icon} from '@rneui/themed';
 import axios from 'axios';
 import axiosInstance from '../../config/axios';
 import YoutubeIframe from 'react-native-youtube-iframe';
+import MovieCard from '../components/MovieCard';
 
 const MovieDetails = ({route}) => {
   const windowWidth = Dimensions.get('window').width;
@@ -36,7 +37,13 @@ const MovieDetails = ({route}) => {
   const [similarMoviesPage, setSimilarMoviesPage] = useState(1);
   const [similarMovies, setSimilarMovies] = useState([]);
 
+  const scrollViewRef = useRef<ScrollView>();
+
+  const flatListViewRef = useRef<FlatList>();
+
   useEffect(() => {
+    scrollViewRef.current?.scrollTo({x: 0, y: 0, animated: true});
+    flatListViewRef.current?.scrollToOffset({animated: true, offset: 0});
     const source = axios.CancelToken.source();
     axiosInstance
       .get(
@@ -84,7 +91,32 @@ const MovieDetails = ({route}) => {
     return () => {
       source.cancel();
     };
-  }, [id, similarMoviesPage]);
+  }, [similarMoviesPage]);
+
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    axiosInstance
+      .get(
+        `movie/${id}/similar?api_key=b488ff37b7bcb45680153eab3372c68e&language=en-US&page=${similarMoviesPage}`,
+        {
+          cancelToken: source.token,
+        },
+      )
+      .then(response => {
+        setSimilarMovies(response.data.results);
+      })
+      .catch(error => {
+        if (axios.isCancel(error)) {
+          console.log('canceled', error);
+        } else {
+          console.log('error in getting similare movies', error);
+        }
+      });
+
+    return () => {
+      source.cancel();
+    };
+  }, [id]);
 
   const onStateChange = useCallback(state => {
     if (state === 'ended') {
@@ -98,7 +130,7 @@ const MovieDetails = ({route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
         <SharedElement id={`image_${id}`}>
           <Image
             source={{uri: imageBaseUrl + image}}
@@ -147,22 +179,32 @@ const MovieDetails = ({route}) => {
             />
           )}
         </View>
-        <View>
-          <Text
-            onPress={() => {
-              setSimilarMoviesPage(similarMoviesPage + 1);
-            }}>
-            Similar Movies
-          </Text>
-          <FlatList
-            data={similarMovies}
-            horizontal
-            keyExtractor={item => item.id}
-            renderItem={({item, index}) => {
-              return <Text key={index}> {item.original_title}</Text>;
-            }}
-          />
-        </View>
+        {similarMovies.length > 0 && (
+          <View>
+            <Text
+              onPress={() => {
+                setSimilarMoviesPage(similarMoviesPage + 1);
+              }}>
+              Similar Movies
+            </Text>
+            <FlatList
+              ref={flatListViewRef}
+              data={similarMovies}
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              keyExtractor={item => `${item.id}_${Math.random()}`}
+              renderItem={({item, index}) => {
+                return (
+                  <MovieCard
+                    data={item}
+                    textColor={colors.black}
+                    refScroll={scrollViewRef}
+                  />
+                );
+              }}
+            />
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -212,7 +254,7 @@ const styles = StyleSheet.create({
   overviewText: {},
   trailerContainer: {
     alignItems: 'center',
-    backgroundColor: 'red',
+    height: 300,
   },
   trailerText: {
     alignSelf: 'flex-start',
