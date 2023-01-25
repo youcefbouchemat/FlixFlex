@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Dimensions,
   FlatList,
   SafeAreaView,
@@ -37,6 +38,8 @@ const MovieDetails = ({route}) => {
   const [similarMoviesPage, setSimilarMoviesPage] = useState(1);
   const [similarMovies, setSimilarMovies] = useState([]);
 
+  const [loader, setLoader] = useState(false);
+
   const scrollViewRef = useRef<ScrollView>();
 
   const flatListViewRef = useRef<FlatList>();
@@ -70,6 +73,7 @@ const MovieDetails = ({route}) => {
 
   useEffect(() => {
     const source = axios.CancelToken.source();
+    setLoader(true);
     axiosInstance
       .get(
         `movie/${id}/similar?api_key=b488ff37b7bcb45680153eab3372c68e&language=en-US&page=${similarMoviesPage}`,
@@ -86,6 +90,9 @@ const MovieDetails = ({route}) => {
         } else {
           console.log('error in getting similare movies', error);
         }
+      })
+      .finally(() => {
+        setLoader(false);
       });
 
     return () => {
@@ -186,6 +193,22 @@ const MovieDetails = ({route}) => {
               showsHorizontalScrollIndicator={false}
               horizontal
               keyExtractor={item => `${item.id}_${Math.random()}`}
+              ListFooterComponent={() => {
+                return (
+                  <View style={styles.loaderContainer}>
+                    {loader && (
+                      <ActivityIndicator
+                        size={'large'}
+                        color={colors.white}
+                        style={styles.loader}
+                      />
+                    )}
+                  </View>
+                );
+              }}
+              onEndReached={() => {
+                setSimilarMoviesPage(similarMoviesPage + 1);
+              }}
               renderItem={({item, index}) => {
                 return <MovieCard data={item} textColor={colors.black} />;
               }}
@@ -283,5 +306,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: colors.white,
   },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  loader: {margin: 16},
 });
 export default MovieDetails;
