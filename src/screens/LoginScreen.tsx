@@ -26,7 +26,6 @@ const LoginScreen = () => {
 
   // Handle user state changes
   function onAuthStateChanged(user) {
-    console.log(user);
     if (user) {
       dispatch({
         type: ActionName.connecte,
@@ -56,7 +55,6 @@ const LoginScreen = () => {
           userName: data.user.displayName,
           userEmail: data.user.email,
         });
-        console.log(user);
       })
       .catch(error => {
         if (error.code == 'auth/invalid-email') {

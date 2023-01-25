@@ -1,9 +1,10 @@
 import {StyleSheet, Text, View, Animated, Dimensions} from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import axiosInstance from '../../config/axios';
 import TrendingMovieCard from './TrendingMovieCard';
 import colors from '../../assets/colors';
+import {useNavigation} from '@react-navigation/native';
 
 const TrendingMovies = () => {
   const newMovieScrollX = useRef(new Animated.Value(0)).current;
@@ -53,12 +54,7 @@ const TrendingMovies = () => {
           {useNativeDriver: false},
         )}
         renderItem={({item, index}) => {
-          return (
-            <TrendingMovieCard
-              title={item.original_title}
-              image={item.backdrop_path}
-            />
-          );
+          return <TrendingMovieCard data={item} />;
         }}
       />
       <View style={styles.dotContainer}>

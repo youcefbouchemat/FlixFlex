@@ -2,6 +2,7 @@ import {StyleSheet, Text, TextInput, View} from 'react-native';
 import React, {useState} from 'react';
 import colors from '../../assets/colors';
 import {Icon} from '@rneui/themed';
+import fonts from '../../assets/fonts/fonts';
 
 const CustomTextInput = props => {
   const [eye, setEye] = useState(true);
@@ -53,5 +54,6 @@ const styles = StyleSheet.create({
   text: {
     color: colors.white,
     flex: 1,
+    fontFamily: fonts.semiBoldFont,
   },
 });

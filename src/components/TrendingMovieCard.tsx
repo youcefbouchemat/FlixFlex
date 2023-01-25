@@ -5,23 +5,31 @@ import {
   View,
   Dimensions,
   ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
 import React from 'react';
 import {imageBaseUrl} from '../../config';
 import fonts from '../../assets/fonts/fonts';
 import colors from '../../assets/colors';
+import {useNavigation} from '@react-navigation/native';
 
 const TrendingMovieCard = props => {
   const windowWidth = Dimensions.get('window').width;
+  const navigation = useNavigation();
+
+  const displayMovieDetails = () => {
+    navigation.navigate('MovieDetails', {data: props.data});
+  };
   return (
-    <Pressable
+    <TouchableOpacity
+      onPress={displayMovieDetails}
       style={{
         width: windowWidth,
         alignItems: 'center',
         justifyContent: 'center',
       }}>
       <ImageBackground
-        source={{uri: imageBaseUrl + props.image}}
+        source={{uri: imageBaseUrl + props.data.backdrop_path}}
         resizeMode="cover"
         imageStyle={styles.image}
         style={{
@@ -30,10 +38,10 @@ const TrendingMovieCard = props => {
           justifyContent: 'flex-end',
         }}>
         <View style={styles.movieTextContainer}>
-          <Text style={styles.movieText}>{props.title}</Text>
+          <Text style={styles.movieText}>{props.data.original_title}</Text>
         </View>
       </ImageBackground>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

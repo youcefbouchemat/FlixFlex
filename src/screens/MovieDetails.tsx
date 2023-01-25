@@ -1,14 +1,45 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
+import colors from '../../assets/colors';
+import {Image} from 'react-native';
+import {imageBaseUrl} from '../../config';
 
-const MovieDetails = () => {
+const MovieDetails = ({route}) => {
+  const title = route.params.data.original_title;
+  const overview = route.params.data.overview;
+  const isAdult = route.params.data.adult;
+  const image = route.params.data.backdrop_path;
+  const releaseDate = route.params.data.release_date;
+  const note = route.params.data.vote_average;
+
   return (
-    <View>
-      <Text>MovieDetails</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Image
+        source={{uri: imageBaseUrl + image}}
+        style={styles.image}
+        resizeMode="cover"
+      />
+    </SafeAreaView>
   );
 };
 
 export default MovieDetails;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+  image: {
+    height: 300,
+    width: '100%',
+    borderBottomLeftRadius: 150,
+    borderBottomRightRadius: 150,
+  },
+});
