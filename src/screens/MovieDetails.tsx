@@ -183,7 +183,7 @@ const MovieDetails = ({route}) => {
           <View style={styles.trailerContainer}>
             <Text style={styles.trailerText}>Trailer</Text>
             <YoutubeIframe
-              height={500}
+              height={(windowWidth / 16) * 9}
               width={windowWidth * 0.9}
               play={trailerIsPlaying}
               videoId={youtubeKey}
@@ -298,7 +298,6 @@ const styles = StyleSheet.create({
   },
   trailerContainer: {
     alignItems: 'center',
-    height: 300,
   },
   trailerText: {
     alignSelf: 'flex-start',
