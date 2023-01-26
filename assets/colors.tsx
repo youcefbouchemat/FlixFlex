@@ -8,6 +8,7 @@ export default {
   secondaryBackground: '#fe4d55',
   alphaBlackBackground: 'rgba(24, 26, 32, 0.59)',
   placeholderText: '#ababab',
+  placeholderBackground: '#344360',
   transparentWhite: 'rgba(255, 255, 255, 0.45)',
   blue: '#2e5ea8',
   black: '#000',

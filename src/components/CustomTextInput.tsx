@@ -39,7 +39,7 @@ export default CustomTextInput;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#344360',
+    backgroundColor: colors.placeholderBackground,
     width: '80%',
     maxWidth: 500,
     borderRadius: 10,
