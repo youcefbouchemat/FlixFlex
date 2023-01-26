@@ -28,7 +28,7 @@ const MoviesFlatList = props => {
         },
       )
       .then(response => {
-        setMovies(movies.concat(response.data.results));
+        setMovies([...movies, ...response.data.results]);
       })
       .catch(error => {
         if (axios.isCancel(error)) {

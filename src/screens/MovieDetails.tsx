@@ -85,7 +85,7 @@ const MovieDetails = ({route}) => {
         },
       )
       .then(response => {
-        setSimilarMovies(similarMovies.concat(response.data.results));
+        setSimilarMovies([...similarMovies, ...response.data.results]);
       })
       .catch(error => {
         if (axios.isCancel(error)) {
