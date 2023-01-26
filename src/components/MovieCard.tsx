@@ -13,7 +13,7 @@ const MovieCard = props => {
     <TouchableOpacity
       style={styles.container}
       onPress={() => {
-        navigation.navigate('MovieDetails', {
+        navigation.push('MovieDetails', {
           data: movie,
         });
       }}>

@@ -26,7 +26,6 @@ const MovieDetails = ({route}) => {
   const id = route.params.data.id;
   const title = route.params.data.original_title;
   const overview = route.params.data.overview;
-  const isAdult = route.params.data.adult;
   const image = route.params.data.backdrop_path;
   const releaseDate = route.params.data.release_date;
   const note = route.params.data.vote_average;
