@@ -16,7 +16,13 @@ const RootApp = () => {
       {isLogin ? (
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name="BottomNavBar" component={BottomNavBar} />
-          <Stack.Screen name="MovieDetails" component={MovieDetails} />
+          <Stack.Screen
+            name="MovieDetails"
+            component={MovieDetails}
+            options={{
+              animationEnabled: false,
+            }}
+          />
         </Stack.Navigator>
       ) : (
         <Stack.Navigator screenOptions={{headerShown: false}}>

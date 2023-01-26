@@ -173,7 +173,7 @@ const MovieDetails = ({route}) => {
           <Text style={styles.overviewText}>{overview}</Text>
         </View>
 
-        {getYoutubeKey == true && youtubeKey == '' ? (
+        {getYoutubeKey == false ? null : youtubeKey == '' ? (
           <View style={styles.noAvailableTrailerContainer}>
             <Text style={styles.noAvailableTrailerText}>
               No Available Trailer
