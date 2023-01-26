@@ -16,7 +16,10 @@ const RegisterScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const register = useCallback(() => {
+  const [signupLoader, setSignupLoader] = useState(false);
+
+  const register = useCallback(async () => {
+    setSignupLoader(true);
     if (username == '' || email == '' || password == '') {
       showError('Please fill out all required fields');
       return;
@@ -43,7 +46,7 @@ const RegisterScreen = () => {
       return;
     }
 
-    auth()
+    await auth()
       .createUserWithEmailAndPassword(email, password)
       .then(async user => {
         user.user.updateProfile({
@@ -61,6 +64,7 @@ const RegisterScreen = () => {
           showError('That email address is invalid!');
         }
       });
+    setSignupLoader(false);
   }, [username, email, password]);
 
   return (
@@ -85,7 +89,11 @@ const RegisterScreen = () => {
           setValue={setPassword}
           isPassword={true}
         />
-        <CustomButton text="Register" onPress={register} />
+        <CustomButton
+          text="Register"
+          onPress={register}
+          isLoading={signupLoader}
+        />
       </View>
     </SafeAreaView>
   );

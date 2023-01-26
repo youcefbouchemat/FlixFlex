@@ -19,6 +19,8 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [signinLoader, setSigninLoader] = useState(false);
+
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
@@ -35,7 +37,8 @@ const LoginScreen = () => {
     }
   }
 
-  const signIn = useCallback(() => {
+  const signIn = useCallback(async () => {
+    setSigninLoader(true);
     if (email == '' || password == '') {
       showError('Please fill out all required fields');
       return;
@@ -47,7 +50,7 @@ const LoginScreen = () => {
       return;
     }
 
-    auth()
+    await auth()
       .signInWithEmailAndPassword(email, password)
       .then(data => {
         dispatch({
@@ -74,6 +77,7 @@ const LoginScreen = () => {
           );
         }
       });
+    setSigninLoader(false);
   }, [email, password]);
 
   const register = useCallback(() => {
@@ -96,7 +100,11 @@ const LoginScreen = () => {
           setValue={setPassword}
           isPassword={true}
         />
-        <CustomButton text="Sign In" onPress={signIn} />
+        <CustomButton
+          text="Sign In"
+          onPress={signIn}
+          isLoading={signinLoader}
+        />
         <CustomButton text="Register" onPress={register} />
       </View>
     </SafeAreaView>
