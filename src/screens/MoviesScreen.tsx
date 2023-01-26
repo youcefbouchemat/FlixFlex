@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Dimensions,
   FlatList,
   SafeAreaView,
   ScrollView,
@@ -17,6 +18,8 @@ import axiosInstance from '../../config/axios';
 import MovieCard from '../components/MovieCard';
 
 const MoviesScreen = () => {
+  const windowWidth = Dimensions.get('window').width;
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [moviesList, setMoviesList] = useState([]);
   const [moviesPage, setMoviesPage] = useState(1);
@@ -103,7 +106,7 @@ const MoviesScreen = () => {
       <FlatList
         ref={flatListViewRef}
         data={moviesList.filter(movie => movie.original_title.includes(search))}
-        numColumns={2}
+        numColumns={parseInt(windowWidth / 170)}
         contentContainerStyle={styles.flatlist}
         keyExtractor={item => `${item.id}_${Math.random()}`}
         ListFooterComponent={() => {
