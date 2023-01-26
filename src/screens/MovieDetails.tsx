@@ -32,6 +32,7 @@ const MovieDetails = ({route}) => {
   const voteCount = route.params.data.vote_count;
 
   const [youtubeKey, setYoutubeKey] = useState('');
+  const [getYoutubeKey, setGetYoutubeKey] = useState(false);
   const [trailerIsPlaying, setTrailerIsPlaying] = useState(false);
 
   const [similarMoviesPage, setSimilarMoviesPage] = useState(1);
@@ -63,6 +64,9 @@ const MovieDetails = ({route}) => {
         } else {
           console.log('error in getting trailer', error);
         }
+      })
+      .finally(() => {
+        setGetYoutubeKey(true);
       });
 
     return () => {
@@ -169,20 +173,25 @@ const MovieDetails = ({route}) => {
           <Text style={styles.overviewText}>{overview}</Text>
         </View>
 
-        <View style={styles.trailerContainer}>
-          <Text style={styles.trailerText}>Trailer</Text>
-          {youtubeKey == '' ? (
-            <Text style={styles.noAvailableTrailer}>No Available Trailer</Text>
-          ) : (
+        {getYoutubeKey == true && youtubeKey == '' ? (
+          <View style={styles.noAvailableTrailerContainer}>
+            <Text style={styles.noAvailableTrailerText}>
+              No Available Trailer
+            </Text>
+          </View>
+        ) : (
+          <View style={styles.trailerContainer}>
+            <Text style={styles.trailerText}>Trailer</Text>
             <YoutubeIframe
               height={500}
               width={windowWidth * 0.9}
               play={trailerIsPlaying}
-              videoId={youtubeUrl + youtubeKey}
+              videoId={youtubeKey}
               onChangeState={onStateChange}
             />
-          )}
-        </View>
+          </View>
+        )}
+
         {similarMovies.length > 0 && (
           <View>
             <Text style={styles.similarMoviesText}>Similar Movies</Text>
@@ -298,7 +307,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: colors.white,
   },
-  noAvailableTrailer: {},
+  noAvailableTrailerContainer: {
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noAvailableTrailerText: {
+    fontFamily: fonts.semiBoldFont,
+    color: colors.white,
+    fontSize: 16,
+  },
   similarMoviesText: {
     padding: 16,
     fontFamily: fonts.boldFont,
