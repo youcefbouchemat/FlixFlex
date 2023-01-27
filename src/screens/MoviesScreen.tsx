@@ -94,6 +94,10 @@ const MoviesScreen = () => {
           }
         }}
         containerStyle={styles.buttonGroup}
+        selectedTextStyle={styles.buttonGroupSelectedText}
+        selectedButtonStyle={{
+          backgroundColor: colors.secondaryBackground,
+        }}
       />
       <SearchBar
         placeholder="Type Here..."
@@ -145,6 +149,11 @@ const styles = StyleSheet.create({
   buttonGroup: {
     backgroundColor: colors.primaryBackground,
     borderRadius: 40,
+  },
+  buttonGroupSelectedText: {
+    fontFamily: fonts.semiBoldFont,
+    color: colors.white,
+    fontSize: 14,
   },
   searchBarContainer: {
     backgroundColor: colors.primaryBackground,
