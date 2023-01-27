@@ -38,7 +38,6 @@ const LoginScreen = () => {
   }
 
   const signIn = useCallback(async () => {
-    setSigninLoader(true);
     if (email == '' || password == '') {
       showError('Please fill out all required fields');
       return;
@@ -49,7 +48,7 @@ const LoginScreen = () => {
       showError('Wrong Email format');
       return;
     }
-
+    setSigninLoader(true);
     await auth()
       .signInWithEmailAndPassword(email, password)
       .then(data => {

@@ -6,13 +6,14 @@ import ActionName from '../redux/reducers/ActionName';
 import CustomButton from '../components/CustomButton';
 import Header from '../components/Header';
 import colors from '../../assets/colors';
+import fonts from '../../assets/fonts/fonts';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
 
   const [logoutLoader, setLogoutLoader] = useState(false);
+  const [deleteAccountLoader, setDeleteAccountLoader] = useState(false);
 
-  const email = useSelector(state => state.AuthReducer.userEmail);
   const name = useSelector(state => state.AuthReducer.userName);
 
   const signOut = useCallback(async () => {
@@ -26,12 +27,41 @@ const ProfileScreen = () => {
     setLogoutLoader(false);
   }, []);
 
+  const deleteAccount = useCallback(async () => {
+    setDeleteAccountLoader(true);
+    let user = auth().currentUser;
+    console.log(user);
+
+    await user
+      ?.delete()
+      .then(() => console.log('User deleted'))
+      .catch(error => console.log(error));
+
+    setDeleteAccountLoader(false);
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <Text>{email}</Text>
-      <Text>{name}</Text>
-      <CustomButton text="Log out" onPress={signOut} isLoading={logoutLoader} />
+      <View style={styles.mainContainer}>
+        <Text>Hey {name}, Thank for using our App</Text>
+        <View style={styles.operationsContainer}>
+          <Text style={styles.operationtext}>
+            You can logout or delete this account You can logout or delete this
+            account You can logout or delete this account
+          </Text>
+          <CustomButton
+            text="Log out"
+            onPress={signOut}
+            isLoading={logoutLoader}
+          />
+          <CustomButton
+            text="Log out"
+            onPress={deleteAccount}
+            isLoading={deleteAccountLoader}
+          />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -42,5 +72,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.primaryBackground,
+  },
+  mainContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+  operationsContainer: {
+    alignItems: 'center',
+    padding: 16,
+  },
+  operationtext: {
+    color: colors.white,
+    fontFamily: fonts.semiBoldFont,
+    fontSize: 16,
+    marginBottom: 16,
   },
 });
