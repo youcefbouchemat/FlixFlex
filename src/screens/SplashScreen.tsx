@@ -11,7 +11,7 @@ const SplashScreen = () => {
         source={Logo}
         animation="bounceIn"
         iterationCount={1}
-        style={{height: 160, width: 250}}
+        style={styles.image}
         resizeMode="contain"
       />
     </View>
@@ -27,4 +27,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  image: {height: 200, width: 200},
 });
