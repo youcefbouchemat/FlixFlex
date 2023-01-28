@@ -1,5 +1,5 @@
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import colors from '../../assets/colors';
 import {Image} from 'react-native';
 import Logo from '../../assets/images/logo.png';
@@ -20,22 +20,6 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
 
   const [signinLoader, setSigninLoader] = useState(false);
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    if (user) {
-      dispatch({
-        type: ActionName.connecte,
-        userName: user.displayName,
-        userEmail: user.email,
-      });
-    }
-  }
 
   const signIn = useCallback(async () => {
     if (email == '' || password == '') {

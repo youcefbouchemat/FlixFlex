@@ -1,6 +1,7 @@
 import ActionName from './ActionName';
 
 const INITIAL_STATE = {
+  isSplash: true,
   isLogin: false,
   userName: null,
   userEmail: null,
@@ -26,6 +27,12 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         userName: action.payload,
+      };
+
+    case ActionName.finishsplash:
+      return {
+        ...state,
+        isSplash: false,
       };
 
     default:
