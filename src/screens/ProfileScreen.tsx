@@ -1,4 +1,4 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {Alert, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import {useDispatch, useSelector} from 'react-redux';
@@ -7,6 +7,7 @@ import CustomButton from '../components/CustomButton';
 import Header from '../components/Header';
 import colors from '../../assets/colors';
 import fonts from '../../assets/fonts/fonts';
+import {showSuccess, showWarning} from '../Messages';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
@@ -27,28 +28,59 @@ const ProfileScreen = () => {
     setLogoutLoader(false);
   }, []);
 
-  const deleteAccount = useCallback(async () => {
+  const deleteAccountAlert = useCallback(
+    () =>
+      Alert.alert(
+        'Delete Account',
+        'Are you sure you want to delete this Account ?',
+        [
+          {
+            text: 'No',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'Yes',
+            onPress: () => {
+              console.log('OK Pressed');
+              deleteAccount();
+            },
+          },
+        ],
+      ),
+    [],
+  );
+
+  const deleteAccount = async () => {
     setDeleteAccountLoader(true);
     let user = auth().currentUser;
     console.log(user);
 
     await user
       ?.delete()
-      .then(() => console.log('User deleted'))
-      .catch(error => console.log(error));
+      .then(() => {
+        showSuccess('Your account has been successfully deleted');
+        dispatch({type: ActionName.disconnect});
+      })
+      .catch(error => {
+        if (error.code === 'auth/requires-recent-login') {
+          showWarning(
+            'This operation is sensitive and requires recent authentication',
+          );
+        }
+      });
 
     setDeleteAccountLoader(false);
-  }, []);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <Header />
       <View style={styles.mainContainer}>
-        <Text>Hey {name}, Thank for using our App</Text>
+        <Text style={styles.mainText}>Hey {name}, Thank for using our App</Text>
         <View style={styles.operationsContainer}>
-          <Text style={styles.operationtext}>
-            You can logout or delete this account You can logout or delete this
-            account You can logout or delete this account
+          <Text style={styles.operationText}>
+            You can logout or delete this account
           </Text>
           <CustomButton
             text="Log out"
@@ -56,8 +88,8 @@ const ProfileScreen = () => {
             isLoading={logoutLoader}
           />
           <CustomButton
-            text="Log out"
-            onPress={deleteAccount}
+            text="Delete account"
+            onPress={deleteAccountAlert}
             isLoading={deleteAccountLoader}
           />
         </View>
@@ -72,6 +104,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.primaryBackground,
+    padding: 16,
   },
   mainContainer: {
     flex: 1,
@@ -80,9 +113,13 @@ const styles = StyleSheet.create({
   },
   operationsContainer: {
     alignItems: 'center',
-    padding: 16,
   },
-  operationtext: {
+  mainText: {
+    color: colors.white,
+    fontFamily: fonts.boldFont,
+    fontSize: 18,
+  },
+  operationText: {
     color: colors.white,
     fontFamily: fonts.semiBoldFont,
     fontSize: 16,
